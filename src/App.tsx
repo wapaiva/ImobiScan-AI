@@ -18,7 +18,7 @@ type Property = {
   notes: string
 }
 
-const STORAGE_KEY = 'imobiscanai.properties.v1'
+import { loadBrowserJsonRecords, saveBrowserJsonRecords, PROPERTY_STORAGE_KEY } from './core/property-storage'
 
 const initialProperties: Property[] = [
   { id: 'IM-0001', name: 'Apartamento Jardim América', type: 'Residencial', city: 'São João del-Rei', state: 'MG', area: 86, value: 425000, status: 'Em análise', updatedAt: '29/10/2026', notes: 'Apartamento com 3 quartos e 1 vaga.' },
@@ -54,14 +54,9 @@ function today() {
 }
 
 function App() {
-  const [properties, setProperties] = useState<Property[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      return stored ? JSON.parse(stored) as Property[] : initialProperties
-    } catch {
-      return initialProperties
-    }
-  })
+  const [properties, setProperties] = useState<Property[]>(() =>
+    loadBrowserJsonRecords<Property>(PROPERTY_STORAGE_KEY, initialProperties)
+  )
   const [activePage, setActivePage] = useState('dashboard')
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('Todos')
@@ -73,7 +68,7 @@ function App() {
   })
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(properties))
+    saveBrowserJsonRecords(PROPERTY_STORAGE_KEY, properties)
   }, [properties])
 
   useEffect(() => {
