@@ -6,10 +6,10 @@ import {
 import type { MeasurementSource, Opening, OpeningKind } from './geometry'
 import './survey.css'
 
-export const ROOM_TYPES = ['Sala', 'Cozinha', 'Banheiro', 'Quarto', 'Corredor', 'Garagem', 'Varanda', 'Área de serviço', 'Escada', 'Área externa', 'Comercial', 'Industrial'] as const
-export type RoomType = typeof ROOM_TYPES[number]
+const ROOM_TYPES = ['Sala', 'Cozinha', 'Banheiro', 'Quarto', 'Corredor', 'Garagem', 'Varanda', 'Área de serviço', 'Escada', 'Área externa', 'Comercial', 'Industrial'] as const
+type RoomType = typeof ROOM_TYPES[number]
 
-export type Room = {
+type Room = {
   id: string
   propertyId: string
   name: string
@@ -72,7 +72,7 @@ export function SurveyPage({ properties, onNotice }: { properties: PropertyRef[]
     const o = { width: Number(opening.width), height: Number(opening.height) }
     const err = validateOpening(selected, o)
     if (err) return onNotice(err)
-    const newOpening: Opening = { id: `AB-${Date.now().toString(36)}`, kind: opening.kind, ...o }
+    const newOpening: Opening = { id: `AB-${crypto.randomUUID()}`, kind: opening.kind, ...o }
     setRooms((c) => c.map((r) => r.id === selected.id ? { ...r, openings: [...r.openings, newOpening] } : r))
   }
 
