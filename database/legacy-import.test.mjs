@@ -32,8 +32,8 @@ test('legacy preview leaves unknown area units pending review', () => {
 test('legacy preview rejects duplicate ids and invalid records', () => {
   const result = previewLegacyImport(JSON.stringify([valid, valid, { ...valid, id: 'IM-2', value: -1 }]));
   assert.equal(result.importable.length, 0);
-  assert.equal(result.needsReview.length, 2);
-  assert.equal(result.rejected.length, 1);
+  assert.equal(result.needsReview.length, 1);
+  assert.equal(result.rejected.length, 2);
 });
 test('legacy import requires explicit confirmation and rolls back on failure', async (t) => {
   const databasePath = await setup(t);
