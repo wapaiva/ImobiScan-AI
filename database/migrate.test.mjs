@@ -4,7 +4,7 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { DatabaseSync } from 'node:sqlite';
+import { DatabaseSync } from './sqlite-driver.mjs';
 import { applyInitialMigration } from './migrate.mjs';
 
 const migrationPath = fileURLToPath(new URL('./migrations/0001_initial.sql', import.meta.url));

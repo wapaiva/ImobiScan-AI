@@ -4,7 +4,7 @@ import {
   PROPERTY_STORAGE_KEY,
   loadJsonRecords,
   saveJsonRecords,
-} from './property-storage.ts'
+} from './property-storage-impl.mjs'
 
 function memoryStorage(initial = {}) {
   const values = new Map(Object.entries(initial))

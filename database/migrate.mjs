@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import { DatabaseSync } from 'node:sqlite';
+import { DatabaseSync } from './sqlite-driver.mjs';
 
 export async function applyInitialMigration(databasePath, migrationPath) {
   const sql = await readFile(migrationPath, 'utf8');

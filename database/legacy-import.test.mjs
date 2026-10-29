@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { DatabaseSync } from 'node:sqlite';
+import { DatabaseSync } from './sqlite-driver.mjs';
 import { applyInitialMigration } from './migrate.mjs';
 import { previewLegacyImport, importLegacyProperties } from './legacy-import.mjs';
 import { fileURLToPath } from 'node:url';
