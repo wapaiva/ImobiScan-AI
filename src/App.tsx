@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
 import './App.css'
+import { SurveyPage } from './survey/SurveyPage'
 
 type PropertyStatus = 'Em análise' | 'Documentação pendente' | 'Concluído'
 type PropertyType = 'Residencial' | 'Comercial' | 'Rural' | 'Terreno'
@@ -31,6 +32,7 @@ const navGroups = [
   { label: 'VISÃO GERAL', items: [{ id: 'dashboard', icon: '▦', label: 'Dashboard' }] },
   { label: 'GESTÃO IMOBILIÁRIA', items: [
     { id: 'properties', icon: '⌂', label: 'Imóveis' },
+    { id: 'survey', icon: '⊞', label: 'Levantamento de campo' },
     { id: 'valuation', icon: '◈', label: 'Avaliações' },
     { id: 'documents', icon: '▤', label: 'Documentos' },
     { id: 'territory', icon: '⌖', label: 'Inteligência territorial' },
@@ -230,6 +232,7 @@ function App() {
             </section>
           )}
 
+          {activePage === 'survey' && <SurveyPage properties={properties.map((p) => ({ id: p.id, name: p.name }))} onNotice={setNotice} />}
           {activePage === 'valuation' && <ModulePlaceholder icon="◈" eyebrow="ANÁLISE TÉCNICA" title="Avaliações imobiliárias" description="Prepare a base de informações para apoiar estudos de valor de imóveis urbanos e rurais." features={['Ficha técnica padronizada por imóvel','Organização de características e áreas','Estrutura futura para comparação de mercado','Relatórios com premissas e rastreabilidade']} note="Estimativas automatizadas e laudos técnicos ainda não estão habilitados. Qualquer avaliação deverá observar os dados disponíveis, a metodologia aplicável e a responsabilidade profissional." actionLabel="Ver imóveis cadastrados" onAction={() => setActivePage('properties')} />}
           {activePage === 'documents' && <ModulePlaceholder icon="▤" eyebrow="ORGANIZAÇÃO DOCUMENTAL" title="Central de documentos" description="Planeje e acompanhe os documentos associados a cada imóvel." features={['Matrículas e certidões','IPTU, cadastro e documentos fiscais','Documentação rural e geoespacial','Lista de pendências por imóvel']} note="O upload e o armazenamento seguro de arquivos serão ativados após a configuração do backend. Não envie documentos pessoais ou sigilosos nesta versão de demonstração." actionLabel="Revisar imóveis pendentes" onAction={() => { setActivePage('properties'); setStatusFilter('Documentação pendente') }} />}
           {activePage === 'territory' && <ModulePlaceholder icon="⌖" eyebrow="DADOS GEOESPACIAIS" title="Inteligência territorial" description="Uma base preparada para integrar informações territoriais e localização dos imóveis." features={['Endereço e coordenadas geográficas','Camadas de mapas e consulta espacial','Suporte planejado a GeoJSON e KML/KMZ','Organização de imóveis urbanos e rurais']} note="Mapas, validação de geometrias e integrações com bases oficiais ainda precisam ser implementados e testados." actionLabel="Abrir portfólio" onAction={() => setActivePage('properties')} />}

@@ -1,0 +1,27 @@
+.survey-toolbar { display: flex; align-items: flex-end; gap: 24px; padding: 16px 19px; margin-bottom: 18px; flex-wrap: wrap; }
+.survey-toolbar .form-field { flex: 1 1 260px; }
+.survey-stat { display: flex; flex-direction: column; gap: 4px; }
+.survey-stat small { color: #a0a5b3; font-size: 8px; font-weight: 700; letter-spacing: .6px; }
+.survey-stat strong { color: #252c3b; font: 800 20px Manrope, sans-serif; }
+.survey-grid { display: grid; grid-template-columns: minmax(300px, 420px) minmax(0, 1fr); gap: 18px; align-items: start; }
+.survey-form { padding: 20px 19px; display: flex; flex-direction: column; gap: 14px; }
+.survey-form .span-two { grid-column: span 2; }
+.survey-row { cursor: pointer; }
+.survey-row.selected td { background: #f4f2ff; }
+.survey-row small { color: #a0a5b3; }
+.survey-delete { border: 0; background: transparent; color: #b4b8c4; font-size: 16px; cursor: pointer; }
+.survey-delete:hover { color: #d04c4c; }
+.survey-empty { color: #969baa; font-size: 11px; }
+.survey-metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.survey-metrics div { padding: 12px; border: 1px solid #eef0f5; border-radius: 9px; background: #fafbfc; display: flex; flex-direction: column; gap: 5px; }
+.survey-metrics small { color: #8d93a3; font-size: 10px; }
+.survey-metrics strong { color: #2c3343; font: 700 15px Manrope, sans-serif; }
+.survey-metrics strong.warn { color: #c9772a; }
+.survey-hint { color: #7d8496; font-size: 10px; margin: 10px 0 0; }
+.survey-sub { margin: 18px 0 10px; font: 700 12px Manrope, sans-serif; color: #303747; }
+.survey-opening-form { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.survey-opening-form select, .survey-opening-form input { border: 1px solid #e2e5ed; border-radius: 7px; padding: 9px; font-size: 11px; width: 110px; }
+.survey-openings { list-style: none; padding: 0; margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.survey-openings li { padding: 6px 10px; border-radius: 6px; background: #f2f0ff; color: #5b4bc0; font-size: 10px; }
+.survey-openings button { border: 0; background: transparent; color: inherit; cursor: pointer; margin-left: 4px; }
+@media (max-width: 900px) { .survey-grid { grid-template-columns: 1fr; } }
