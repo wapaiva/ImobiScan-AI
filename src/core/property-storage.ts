@@ -41,3 +41,20 @@ export function saveJsonRecords<T>(
     return false
   }
 }
+
+/** Browser-safe wrappers also catch failures while accessing localStorage itself. */
+export function loadBrowserJsonRecords<T>(key: string, fallback: T[]): T[] {
+  try {
+    return loadJsonRecords(globalThis.localStorage, key, fallback)
+  } catch {
+    return fallback
+  }
+}
+
+export function saveBrowserJsonRecords<T>(key: string, records: T[]): boolean {
+  try {
+    return saveJsonRecords(globalThis.localStorage, key, records)
+  } catch {
+    return false
+  }
+}
