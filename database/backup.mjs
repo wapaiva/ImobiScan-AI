@@ -1,16 +1,25 @@
 import { copyFile, mkdir, stat } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { DatabaseSync } from 'node:sqlite';
+import { DatabaseSync } from './sqlite-driver.mjs';
 import { createHash } from 'node:crypto';
 import { createReadStream } from 'node:fs';
 
-export const CURRENT_SCHEMA_VERSION = 1;
+export const CURRENT_SCHEMA_VERSION = 2;
 const REQUIRED_TABLES = [
   'clients', 'responsibles', 'properties', 'property_units', 'surveys',
   'survey_versions', 'rooms', 'building_elements', 'laser_devices',
   'device_sessions', 'measurements', 'measurement_revisions', 'media_assets',
   'audit_log', 'backup_records', 'schema_migrations',
 ];
+// Tables introduced by later migrations are only required once the schema has
+// reached that version, so v1 backups remain valid while newer ones are checked
+// against the full expected surface.
+const VERSIONED_REQUIRED_TABLES = {
+  2: [
+    'object_categories', 'object_definitions', 'object_instances',
+    'plan_versions', 'detected_objects',
+  ],
+};
 
 export async function sha256File(filePath) {
   const hash = createHash('sha256');
@@ -37,8 +46,16 @@ export async function validateBackup(filePath, options = {}) {
     if (missing.length) throw new Error(`Backup sem tabelas obrigatórias: ${missing.join(', ')}`);
     const migration = db.prepare('SELECT MAX(version) AS version FROM schema_migrations').get();
     const version = migration?.version ?? 0;
-    if (version !== CURRENT_SCHEMA_VERSION) {
-      throw new Error(`Versão do esquema incompatível: ${version}; esperada: ${CURRENT_SCHEMA_VERSION}.`);
+    if (version > CURRENT_SCHEMA_VERSION) {
+      throw new Error(`Versão do esquema incompatível: ${version}; suportada no máximo: ${CURRENT_SCHEMA_VERSION}.`);
+    }
+    const versionedRequired = [];
+    for (const [minVersion, tables] of Object.entries(VERSIONED_REQUIRED_TABLES)) {
+      if (version >= Number(minVersion)) versionedRequired.push(...tables);
+    }
+    const missingVersioned = versionedRequired.filter((name) => !names.has(name));
+    if (missingVersioned.length) {
+      throw new Error(`Backup na versão ${version} sem tabelas obrigatórias dessa versão: ${missingVersioned.join(', ')}`);
     }
     const checksum = await sha256File(absolute);
     if (options.expectedSha256 && options.expectedSha256 !== checksum) {

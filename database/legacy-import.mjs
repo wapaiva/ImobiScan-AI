@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { DatabaseSync } from 'node:sqlite';
+import { DatabaseSync } from './sqlite-driver.mjs';
 
 export const LEGACY_STORAGE_KEY = 'imobiscanai.properties.v1';
 
