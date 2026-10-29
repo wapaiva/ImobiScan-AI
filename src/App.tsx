@@ -18,7 +18,7 @@ type Property = {
   notes: string
 }
 
-import { loadJsonRecords, saveJsonRecords, PROPERTY_STORAGE_KEY } from './core/property-storage'
+import { loadBrowserJsonRecords, saveBrowserJsonRecords, PROPERTY_STORAGE_KEY } from './core/property-storage'
 
 const initialProperties: Property[] = [
   { id: 'IM-0001', name: 'Apartamento Jardim América', type: 'Residencial', city: 'São João del-Rei', state: 'MG', area: 86, value: 425000, status: 'Em análise', updatedAt: '29/10/2026', notes: 'Apartamento com 3 quartos e 1 vaga.' },
@@ -55,7 +55,7 @@ function today() {
 
 function App() {
   const [properties, setProperties] = useState<Property[]>(() =>
-    loadJsonRecords<Property>(window.localStorage, PROPERTY_STORAGE_KEY, initialProperties)
+    loadBrowserJsonRecords<Property>(PROPERTY_STORAGE_KEY, initialProperties)
   )
   const [activePage, setActivePage] = useState('dashboard')
   const [search, setSearch] = useState('')
@@ -68,7 +68,7 @@ function App() {
   })
 
   useEffect(() => {
-    saveJsonRecords(window.localStorage, PROPERTY_STORAGE_KEY, properties)
+    saveBrowserJsonRecords(PROPERTY_STORAGE_KEY, properties)
   }, [properties])
 
   useEffect(() => {
