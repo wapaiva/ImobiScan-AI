@@ -28,3 +28,31 @@ Antes de implementar a restauração no aplicativo, validar o arquivo candidato 
 ## Verificação local
 
 Requer Node.js compatível com `node:sqlite` para testes de SQLite reais, além das dependências atuais do projeto. Esta branch usa testes do Node nativo para unidades. Ainda é necessário implementar e testar runner de migração, backup/restauração e integração desktop antes de afirmar que esses recursos estão concluídos.
+
+
+## Implementado nesta continuação
+
+- `database/legacy-import.mjs`: prévia de JSON legado, validação de campos, rejeição de códigos duplicados, separação de registros com área sem unidade conhecida e importação transacional de registros elegíveis. A função exige `{ confirm: true }`; não acessa nem remove a chave de localStorage.
+- `database/backup.mjs`: criação de cópia consistente com `VACUUM INTO`, validação somente leitura com `PRAGMA integrity_check`, `foreign_key_check`, tabelas obrigatórias, versão do esquema e SHA-256. A cópia validada só é escrita em destino novo; destinos existentes não são sobrescritos.
+- Testes para importação legada e operações de backup em `database/*.test.mjs`.
+
+## Limitações importantes ainda abertas
+
+1. A interface React permanece conectada ao `localStorage`; ainda não existe adaptador desktop nem sincronização com SQLite.
+2. O importador grava os campos principais do imóvel no banco. Área e valor legados são preservados em observações textuais; eles ainda não são migrados para medições estruturadas do domínio. Registros cuja unidade de área não está explícita ficam pendentes de revisão e não são importados.
+3. `copyValidatedBackup` é uma primitiva de cópia segura, não substitui o banco ativo. A restauração operacional requer shell desktop, fechamento de todas as conexões, cópia de recuperação e substituição atômica testada no Windows.
+4. O runner e a camada de banco usam `node:sqlite`, disponível em versões recentes do Node. Isso é apropriado para testes/ferramentas Node, mas não torna SQLite disponível diretamente no navegador.
+5. Tauri 2 versus Electron permanece em aberto. Nenhuma integração de hardware, câmera, IA, AR, nuvem, editor 2D/3D ou Revit faz parte desta etapa.
+
+## Validação local
+
+Na raiz do repositório, usando PowerShell:
+
+```powershell
+npm.cmd install
+npm.cmd test
+npm.cmd run build
+npm.cmd run lint
+```
+
+Todos os testes devem passar no Windows antes de aceitar a etapa. Não considerar build/lint como prova de compatibilidade de hardware nem de prontidão comercial.
